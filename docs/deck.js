@@ -157,14 +157,18 @@ rgbContext.putImageData(scene, 0, 0);
 
 function updateMask() {
   const threshold = Number(byId("threshold").value);
+  // Use the deck’s brick accent and paper background for the binary mask.
+  const foreground = [150, 63, 47];
+  const background = [250, 250, 247];
   let hits = 0;
   for (let pixel = 0; pixel < scores.length; pixel++) {
     const detected = scores[pixel] >= threshold;
     const offset = 4 * pixel;
     hits += Number(detected);
-    mask.data[offset] = detected ? 230 : 29;
-    mask.data[offset + 1] = detected ? 130 : 55;
-    mask.data[offset + 2] = detected ? 177 : 55;
+    const [red, green, blue] = detected ? foreground : background;
+    mask.data[offset] = red;
+    mask.data[offset + 1] = green;
+    mask.data[offset + 2] = blue;
     mask.data[offset + 3] = 255;
   }
   maskContext.putImageData(mask, 0, 0);

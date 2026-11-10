@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#f8f7f3">
+<meta name="theme-color" content="#FAFAF7">
 <title>Following Saharan dust · Visual Perception</title>
 <link rel="stylesheet" href="deck.css">
 <script src="deck.js" defer></script>
@@ -76,7 +76,7 @@
   <header><p class="eyebrow">02 / Detect · interactive simulation</p><h2 id="s5">Move the threshold. Watch the mask.</h2></header>
   <div class="sim-grid">
     <figure><canvas id="rgb" width="360" height="196" role="img" aria-label="Synthetic dust RGB scene with diffuse magenta dust and a bright distractor"></canvas><figcaption>Synthetic Dust RGB scene</figcaption></figure>
-    <figure><canvas id="mask" width="360" height="196" role="img" aria-label="Binary mask computed at the selected color score threshold"></canvas><figcaption>Detected pixels in magenta</figcaption></figure>
+    <figure><canvas id="mask" width="360" height="196" role="img" aria-label="Binary mask computed at the selected color score threshold"></canvas><figcaption>Detected pixels in brick red</figcaption></figure>
   </div>
   <div class="sim-controls">
     <label for="threshold">Color score cutoff <output id="threshold-value" for="threshold">32</output></label>
@@ -94,16 +94,16 @@
       <svg class="track-map" viewBox="0 0 620 325" role="img" aria-labelledby="map-title map-desc">
         <title id="map-title">Simulated plume moving west from the African coast</title>
         <desc id="map-desc">A schematic map with a plume footprint, its earlier centroid positions and a current centroid.</desc>
-        <defs><pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M 50 0 L 0 0 0 50" fill="none" stroke="#355052" stroke-width="1"/></pattern></defs>
-        <rect width="620" height="325" fill="#153437"/>
+        <defs><pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M 50 0 L 0 0 0 50" class="grid-line" fill="none" stroke-width="1"/></pattern></defs>
+        <rect width="620" height="325" class="ocean"/>
         <rect width="620" height="325" fill="url(#grid)"/>
-        <path d="M620 0H528L508 27 487 43 476 64 455 80 443 107 421 126 410 153 405 175 386 187 398 201 407 219 424 227 442 248 461 262 484 274 506 272 531 266 551 269 564 290 583 304 620 314Z" fill="#d8c098" stroke="#f5dcac" stroke-width="2"/>
-        <g fill="#e3d1af"><circle cx="290" cy="187" r="2.8"/><circle cx="300" cy="182" r="2"/><circle cx="286" cy="196" r="2.2"/></g>
-        <text x="496" y="84" fill="#51351d">WEST AFRICA</text><text x="42" y="271" fill="#9bb9ba">ATLANTIC OCEAN</text><text x="241" y="223" fill="#c1d2ce">CABO VERDE</text>
-        <path id="previous-plume" fill="none" stroke="#f9d68f" stroke-dasharray="6 6" opacity=".55"/>
-        <path id="plume" fill="#e781af" fill-opacity=".75" stroke="#ffcee2" stroke-width="2"/>
-        <polyline id="trail" fill="none" stroke="#ffe5ad" stroke-width="2"/>
-        <circle id="centroid" r="5" fill="#fff0bf" stroke="#412b24" stroke-width="1.5"/>
+        <path d="M620 0H528L508 27 487 43 476 64 455 80 443 107 421 126 410 153 405 175 386 187 398 201 407 219 424 227 442 248 461 262 484 274 506 272 531 266 551 269 564 290 583 304 620 314Z" class="land" stroke-width="2"/>
+        <g class="islands"><circle cx="290" cy="187" r="2.8"/><circle cx="300" cy="182" r="2"/><circle cx="286" cy="196" r="2.2"/></g>
+        <text x="496" y="84" class="land-label">WEST AFRICA</text><text x="42" y="271" class="water-label">ATLANTIC OCEAN</text><text x="241" y="223" class="water-label">CABO VERDE</text>
+        <path id="previous-plume" fill="none" stroke-dasharray="6 6" opacity=".55"/>
+        <path id="plume" fill-opacity=".92" stroke-width="2"/>
+        <polyline id="trail" fill="none" stroke-width="2"/>
+        <circle id="centroid" r="5" stroke-width="1.5"/>
       </svg>
       <figcaption>Schematic geography and simulated footprints</figcaption>
     </figure>
