@@ -3,7 +3,7 @@
   --ink: #202124;
   --muted: #57585C;
   --line: #D8D9D5;
-  --accent: #963F2F;
+  --accent: #36566C;
   --pale: #F0F0EC;
   --gutter: clamp(20px, 6vw, 108px);
   color-scheme: light;
@@ -75,7 +75,7 @@ input[type="range"] { width: 100%; accent-color: var(--accent); }
 .track-map .islands { fill: var(--line); }
 .track-map .land-label { fill: var(--ink); }
 .track-map .water-label { fill: var(--line); }
-#plume { fill: var(--accent); stroke: #F0B9AC; }
+#plume { fill: var(--accent); stroke: #A8C3D3; }
 #previous-plume { stroke: var(--line); }
 #trail { stroke: var(--paper); }
 #centroid { fill: var(--paper); stroke: var(--ink); }

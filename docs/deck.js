@@ -157,8 +157,8 @@ rgbContext.putImageData(scene, 0, 0);
 
 function updateMask() {
   const threshold = Number(byId("threshold").value);
-  // Use the deck’s brick accent and paper background for the binary mask.
-  const foreground = [150, 63, 47];
+  // Use the deck’s slate-blue accent and paper background for the binary mask.
+  const foreground = [54, 86, 108];
   const background = [250, 250, 247];
   let hits = 0;
   for (let pixel = 0; pixel < scores.length; pixel++) {
