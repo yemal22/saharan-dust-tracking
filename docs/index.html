@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f8f7f3">
+<title>Following Saharan dust · Visual Perception</title>
+<link rel="stylesheet" href="deck.css">
+<script src="deck.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#deck">Skip to slide</a>
+<nav id="progress" class="progress" aria-label="Presentation sections"></nav>
+<main id="deck" tabindex="-1">
+
+<section class="slide cover" data-section="The question" aria-labelledby="s1">
+  <div class="cover-copy">
+    <p class="eyebrow">Visual Perception / Project proposal</p>
+    <h1 id="s1">Following<br>Saharan dust</h1>
+    <p class="subtitle">Can we follow a dust plume from satellite images?</p>
+    <p class="author">Morel KPAVODE</p>
+  </div>
+  <figure class="cover-image">
+    <img src="assets/atlantic.webp" alt="Satellite view of Earth with a broad tan dust plume stretching west of Africa">
+    <figcaption>18 June 2020 · DSCOVR EPIC · NASA Earth Observatory</figcaption>
+  </figure>
+  <template class="notes">Start with the photo. The tan streak extending from northwest Africa is airborne dust. Ask what we would need to know to follow it from one image to the next. This is a project proposal for the Visual Perception course.</template>
+</section>
+
+<section class="slide" data-section="The question" aria-labelledby="s2" hidden>
+  <header><p class="eyebrow">01 / The question</p><h2 id="s2">Where would you draw the boundary?</h2></header>
+  <div class="split observe">
+    <figure>
+      <div class="photo"><img src="assets/cabo-verde.webp" alt="NASA Terra MODIS image of dust and cloud patterns around the Cabo Verde islands"></div>
+      <figcaption>18 June 2020 · Terra MODIS over Cabo Verde · <a href="https://science.nasa.gov/earth/earth-observatory/dust-traverses-the-atlantic-ocean-146871/">NASA Earth Observatory</a></figcaption>
+    </figure>
+    <div>
+      <p class="statement">The dust plume is visible.<br>Its edge is fuzzy.</p>
+      <div class="build annotation" data-build="1"><b>Look over the ocean.</b><p>The tan haze fades gradually. Bright clouds and wakes around the islands complicate the picture.</p></div>
+      <div class="build annotation" data-build="2"><b>Now look again an hour later.</b><p>Which part of the changed shape belongs to the same plume?</p></div>
+    </div>
+  </div>
+  <template class="notes">Give the audience a few seconds to look. NASA describes V-shaped wakes on the leeward side of the islands. [click] Point to the diffuse haze around the cloud patterns. [click] Transition from drawing a boundary in a single image to associating boundaries over time. This June image illustrates a Saharan dust event.</template>
+</section>
+
+<section class="slide" data-section="The question" aria-labelledby="s3" hidden>
+  <header><p class="eyebrow">01 / The question</p><h2 id="s3">One plume, three tasks</h2></header>
+  <div class="tasks">
+    <article class="task build" data-build="1"><span>01</span><h3>Detect</h3><p>Which pixels are likely to contain dust?</p></article>
+    <article class="task build" data-build="2"><span>02</span><h3>Measure</h3><p>How much ground area does the detected plume cover?</p></article>
+    <article class="task build" data-build="3"><span>03</span><h3>Track</h3><p>How does the plume’s position change across frames?</p></article>
+  </div>
+  <p class="takeaway">One week · One episode · Western Sahara and adjacent West Africa</p>
+  <template class="notes">The broader motivation came from Harmattan dust. The class project follows one Saharan dust episode. [click] Detection means a pixel mask. [click] For area, sum georeferenced pixel areas or use an equal-area grid. [click] Tracking is association across observed timestamps. Forecasting is an extension.</template>
+</section>
+
+<section class="slide" data-section="Detect" aria-labelledby="s4" hidden>
+  <header><p class="eyebrow">02 / Detect</p><h2 id="s4">Give the detector a better view</h2></header>
+  <div class="split data-slide">
+    <div class="recipe" aria-label="The three infrared components of Dust RGB">
+      <div><span class="channel red">R</span><div><b>12.0 − 10.8 μm</b><small>Brightness temperature difference</small></div></div>
+      <div><span class="channel green">G</span><div><b>10.8 − 8.7 μm</b><small>Brightness temperature difference</small></div></div>
+      <div><span class="channel blue">B</span><div><b>10.8 μm</b><small>Brightness temperature</small></div></div>
+    </div>
+    <div>
+      <p class="statement">Meteosat Dust RGB combines infrared channels so dust often appears pink or magenta.</p>
+      <p class="build annotation" data-build="1">Start with an interpretable color rule. Compare its mask with hand-traced plume boundaries.</p>
+      <p class="build annotation" data-build="2">Clouds can hide dust. Thin dust can be hard to see, especially over water.</p>
+      <p class="source-line"><a href="https://view.eumetsat.int/productviewer/productDetails/msg_fes%3Argb_dust?v=msg_fes%3Argb_dust">EUMETSAT Meteosat Dust RGB</a> · <a href="https://resources.eumetrain.org/rgb_quick_guides/QG_unified.pdf">Interpretation guide</a></p>
+    </div>
+  </div>
+  <template class="notes">The opening NASA images are true-color examples. The proposed model input is a georeferenced Meteosat infrared composite, processed with the product's channel scaling. [click] Use a simple color score, a threshold, and removal of tiny isolated regions as a baseline. [click] Cloud cover and background changes can cause misses and false detections.</template>
+</section>
+
+<section class="slide" data-section="Detect" aria-labelledby="s5" hidden>
+  <header><p class="eyebrow">02 / Detect · interactive simulation</p><h2 id="s5">Move the threshold. Watch the mask.</h2></header>
+  <div class="sim-grid">
+    <figure><canvas id="rgb" width="360" height="196" role="img" aria-label="Synthetic dust RGB scene with diffuse magenta dust and a bright distractor"></canvas><figcaption>Synthetic Dust RGB scene</figcaption></figure>
+    <figure><canvas id="mask" width="360" height="196" role="img" aria-label="Binary mask computed at the selected color score threshold"></canvas><figcaption>Detected pixels in magenta</figcaption></figure>
+  </div>
+  <div class="sim-controls">
+    <label for="threshold">Color score cutoff <output id="threshold-value" for="threshold">32</output></label>
+    <input id="threshold" type="range" min="5" max="100" value="32">
+    <p id="coverage" class="metric">—</p>
+  </div>
+  <p class="fine">A low cutoff can pick up background. A high cutoff can lose the plume’s thin edges.</p>
+  <template class="notes">Move the slider low, then high. The synthetic scene includes a small pink distractor to show why a color rule can fail. The score here is min(red, blue) minus green, evaluated over synthetic pixels. The number is mask coverage of the image. For the real project, estimate area using georeferenced pixels.</template>
+</section>
+
+<section class="slide" data-section="Track" aria-labelledby="s6" hidden>
+  <header><p class="eyebrow">03 / Track · interactive simulation</p><h2 id="s6">Follow the same plume through time</h2></header>
+  <div class="split tracking">
+    <figure>
+      <svg class="track-map" viewBox="0 0 620 325" role="img" aria-labelledby="map-title map-desc">
+        <title id="map-title">Simulated plume moving west from the African coast</title>
+        <desc id="map-desc">A schematic map with a plume footprint, its earlier centroid positions and a current centroid.</desc>
+        <defs><pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse"><path d="M 50 0 L 0 0 0 50" fill="none" stroke="#355052" stroke-width="1"/></pattern></defs>
+        <rect width="620" height="325" fill="#153437"/>
+        <rect width="620" height="325" fill="url(#grid)"/>
+        <path d="M620 0H528L508 27 487 43 476 64 455 80 443 107 421 126 410 153 405 175 386 187 398 201 407 219 424 227 442 248 461 262 484 274 506 272 531 266 551 269 564 290 583 304 620 314Z" fill="#d8c098" stroke="#f5dcac" stroke-width="2"/>
+        <g fill="#e3d1af"><circle cx="290" cy="187" r="2.8"/><circle cx="300" cy="182" r="2"/><circle cx="286" cy="196" r="2.2"/></g>
+        <text x="496" y="84" fill="#51351d">WEST AFRICA</text><text x="42" y="271" fill="#9bb9ba">ATLANTIC OCEAN</text><text x="241" y="223" fill="#c1d2ce">CABO VERDE</text>
+        <path id="previous-plume" fill="none" stroke="#f9d68f" stroke-dasharray="6 6" opacity=".55"/>
+        <path id="plume" fill="#e781af" fill-opacity=".75" stroke="#ffcee2" stroke-width="2"/>
+        <polyline id="trail" fill="none" stroke="#ffe5ad" stroke-width="2"/>
+        <circle id="centroid" r="5" fill="#fff0bf" stroke="#412b24" stroke-width="1.5"/>
+      </svg>
+      <figcaption>Schematic geography and simulated footprints</figcaption>
+    </figure>
+    <div>
+      <p class="statement">Match nearby masks across frames and follow their centers.</p>
+      <div class="legend"><span><i class="key plume-key"></i> Current mask</span><span><i class="key trail-key"></i> Centroid trail</span><span><i class="key previous-key"></i> Previous mask</span></div>
+      <div class="track-controls"><button id="play" type="button">Play</button><label for="time">Frame <output id="frame" for="time">01 / 13</output></label></div>
+      <input id="time" type="range" min="0" max="12" value="0" aria-label="Simulation frame">
+      <p id="movement" class="fine">Start of the simulated sequence.</p>
+    </div>
+  </div>
+  <template class="notes">Press Play or scrub the timeline. Each dot would be the centroid of a detected mask. On actual data, a baseline can match components using overlap and centroid distance. The center can move if the plume grows asymmetrically, and a split or merge needs an explicit flag. The map and sequence are illustrative.</template>
+</section>
+
+<section class="slide" data-section="Track" aria-labelledby="s7" hidden>
+  <header><p class="eyebrow">03 / Track</p><h2 id="s7">What comes out of the pipeline?</h2></header>
+  <div class="workflow">
+    <div><span>INPUT</span><h3>Satellite frames</h3><p>Same region and projection across timestamps.</p></div><i aria-hidden="true">→</i>
+    <div class="build" data-build="1"><span>DETECT &amp; MEASURE</span><h3>Mask and area</h3><p>Estimate the footprint in km² on an equal-area grid.</p></div><i class="build" data-build="1" aria-hidden="true">→</i>
+    <div class="build" data-build="2"><span>TRACK</span><h3>Plume trajectory</h3><p>Map the centroid positions and flag gaps or splits.</p></div>
+  </div>
+  <p class="build takeaway" data-build="3">The footprint is an area estimate. Dust concentration would require additional data.</p>
+  <template class="notes">Choose a sequence with consistent spatial coverage. [click] Compute footprint area using an equal-area grid, and keep the mask so results can be inspected. [click] Associate detections across time. [click] Dust RGB alone does not yield dust concentration or ground-level PM2.5. Those are separate targets.</template>
+</section>
+
+<section class="slide" data-section="Validate" aria-labelledby="s8" hidden>
+  <header><p class="eyebrow">04 / Validate</p><h2 id="s8">How will we know it works?</h2></header>
+  <div class="checks">
+    <article><h3>Hand-label a small set</h3><p>Trace visible dust on representative frames and flag ambiguous boundaries.</p></article>
+    <article class="build" data-build="1"><h3>Hold back later frames</h3><p>Tune the rule on earlier frames. Report mask IoU and show false positives and misses on held-out frames.</p></article>
+    <article class="build" data-build="2"><h3>Check the track</h3><p>Compare the automated track with hand-marked plume centers. Report typical location error and show any gaps.</p></article>
+  </div>
+  <p class="fine">IoU is the area shared by two masks divided by the area covered by either mask.</p>
+  <template class="notes">A few hand annotations are feasible for a one-week project. [click] Chronological separation reduces near-duplicate leakage, but evaluation within one event is still a within-event check. [click] Show cases where the track breaks instead of joining gaps without evidence.</template>
+</section>
+
+<section class="slide" data-section="Validate" aria-labelledby="s9" hidden>
+  <header><p class="eyebrow">04 / Validate</p><h2 id="s9">What can we show after one week?</h2></header>
+  <div class="timeline">
+    <div><span>Days 1–2</span><h3>Get the frames</h3><p>Pick a visible event, align the sequence and annotate a subset.</p></div>
+    <div><span>Days 3–5</span><h3>Build the baseline</h3><p>Segment dust, calculate footprint area and link masks across time.</p></div>
+    <div><span>Days 6–7</span><h3>Evaluate and show</h3><p>Produce a short replay with a track, area estimates and failure examples.</p></div>
+  </div>
+  <p class="build takeaway" data-build="1">If tracking is reliable, try a short wind-assisted forecast as a separate experiment.</p>
+  <template class="notes">The core deliverable is a replay of one observed episode with its masks and track. [click] A forecast is a separate experiment. It needs a later frame for validation and would only be attempted if time permits.</template>
+</section>
+
+<section class="slide closing" data-section="Validate" aria-labelledby="s10" hidden>
+  <div>
+    <p class="eyebrow">Discussion</p>
+    <h2 id="s10">When is it still<br>the same plume?</h2>
+    <p class="subtitle">A plume can stretch, split, or pass behind a cloud. How should the tracker handle each case?</p>
+  </div>
+  <div class="credits">
+    <p><strong>Satellite imagery</strong> · Joshua Stevens, NASA Earth Observatory, using DSCOVR EPIC and Terra MODIS data. <a href="https://science.nasa.gov/earth/earth-observatory/dust-traverses-the-atlantic-ocean-146871/">View source</a></p>
+    <p><strong>Proposed data</strong> · <a href="https://view.eumetsat.int/productviewer/productDetails/msg_fes%3Argb_dust?v=msg_fes%3Argb_dust">EUMETSAT Dust RGB</a> and <a href="https://resources.eumetrain.org/rgb_quick_guides/QG_unified.pdf">EUMeTrain Quick Guides</a>.</p>
+  </div>
+  <template class="notes">Invite the audience to propose one rule for a split and one rule for a cloud gap. Use the discussion to distinguish what the images directly show from decisions made by the tracking algorithm.</template>
+</section>
+
+</main>
+<aside id="notes" class="notes" aria-label="Speaker notes" hidden></aside>
+<footer class="deck-controls">
+  <span id="counter" aria-live="polite"></span>
+  <div>
+    <button id="notes-toggle" type="button" aria-pressed="false" title="Speaker notes (N)">Notes</button>
+    <button id="fullscreen" type="button" title="Fullscreen (F)">Fullscreen</button>
+    <button id="previous" type="button" aria-label="Previous slide or reveal" title="Previous (left arrow)">←</button>
+    <button id="next" type="button" aria-label="Next slide or reveal" title="Next (right arrow)">→</button>
+  </div>
+</footer>
+<noscript><p>This deck needs JavaScript for slide navigation and simulations.</p></noscript>
+</body>
+</html>
